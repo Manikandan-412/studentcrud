@@ -27,7 +27,7 @@ const Login = () => {
 
     if (isLogin) {
       try {
-        const response = await axios.post("http://localhost:3001/user/login", {
+        const response = await axios.post("https://studentcrud-gi2u.onrender.com/user/login", {
           email: formData.email,
           password: formData.password,
         });
@@ -46,7 +46,7 @@ const Login = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:3001/user/addData",
+          "https://studentcrud-gi2u.onrender.com/user/addData",
           formData
         );
         console.log(response.data);

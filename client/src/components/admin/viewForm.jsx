@@ -10,7 +10,7 @@ const ViewUsers = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/users");
+            const response = await axios.get("https://studentcrud-gi2u.onrender.com/users");
             setUsers(response.data);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -38,7 +38,7 @@ const ViewUsers = () => {
                             <tr key={user._id}>
                                 <td>
                                     {user.image ? (
-                                        <img src={`http://localhost:3001${user.image}`} alt={user.name} width="100" />
+                                        <img src={`https://studentcrud-gi2u.onrender.com${user.image}`} alt={user.name} width="100" />
                                     ) : (
                                         "No Image"
                                     )}
