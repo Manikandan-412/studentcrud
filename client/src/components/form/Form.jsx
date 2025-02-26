@@ -29,12 +29,13 @@ const UploadForm = () => {
         if (formData.image) data.append("image", formData.image);
 
         try {
-            const response = await axios.post("https://studentcrud-gi2u.onrender.com/users/upload", data, {
+            const response = await axios.post("http://localhost:5000/users/upload", data, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             alert(response.data.message);
         } catch (error) {
             console.error("Error uploading data:", error);
+            alert("Error! uploading data")
         }
     };
 
