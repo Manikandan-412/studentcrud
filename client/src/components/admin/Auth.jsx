@@ -1,132 +1,55 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./auth.css";
-const Login = () => {
-  const navigate = useNavigate();
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-  const [isLogin, setIsLogin] = useState(true); 
+const LoginPage = () => {
+    const [credentials, setCredentials] = useState({ email: "", password: "" });
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+    const handleChange = (e) => {
+        setCredentials({ ...credentials, [e.target.name]: e.target.value });
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post("http://localhost:5000/users/login", credentials);
+            if (response.data.success) {
+                localStorage.setItem("token", response.data.token);
+                navigate("/profile");
+            } else {
+                setError("Invalid email or password");
+            }
+        } catch (err) {
+            setError("Login failed. Please try again.");
+        }
+    };
 
-    if (isLogin) {
-      try {
-        const response = await axios.post("http://studentcrud-gi2u.onrender.com/user/login", {
-          email: formData.email,
-          password: formData.password,
-        });
-        navigate("/home");
-        window.alert("Login Successfully");
-        console.log(response.data);
-      } catch (error) {
-        console.log("Login failed:");
-        alert("Login failed. Please check your credentials.");
-      }
-    } else {
-      if (formData.password !== formData.confirmPassword) {
-        window.alert("Passwords do not match");
-        return;
-      }
-
-      try {
-        const response = await axios.post(
-          "http://studentcrud-gi2u.onrender.com/user/addData",
-          formData
-        );
-        console.log(response.data);
-        window.alert("User registration successful");
-        navigate("/home");
-      } catch (error) {
-        console.error("Registration failed:");
-        window.alert("Registration failed. Please try again.");
-      }
-    }
-  };
-
-  return (
-    
-    <div className="container">
-      <div className="auth-container">
-        <form onSubmit={handleSubmit}>
-          {!isLogin && (
-            <div>
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={formData.name}
-                required
-                onChange={handleChange}
-              />
+    return (
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card shadow-lg p-4">
+                        <h2 className="text-center">Login</h2>
+                        {error && <div className="alert alert-danger">{error}</div>}
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-3">
+                                <label className="form-label">Email</label>
+                                <input type="email" className="form-control" name="email" value={credentials.email} onChange={handleChange} required />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label">Password</label>
+                                <input type="password" className="form-control" name="password" value={credentials.password} onChange={handleChange} required />
+                            </div>
+                            <button type="submit" className="btn btn-primary w-100">Login</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-          )}
-          <div>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              required
-              onChange={handleChange}
-            />
-          </div>
-          {!isLogin && (
-            <div>
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Mobile Number"
-                value={formData.number}
-                required
-                onChange={handleChange}
-              />
-            </div>
-          )}
-          <div className="password-input">
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              required
-              onChange={handleChange}
-            />
-          </div>
-          {!isLogin && (
-            <div className="password-input">
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                required
-                onChange={handleChange}
-              />
-            </div>
-          )}
-
-          <button className="button" type="submit" colorScheme="teal">
-            {isLogin ? "Login" : "Register"}
-          </button>
-        </form>
-        <p id="switch" onClick={() => setIsLogin(!isLogin)}>
-          {isLogin
-            ? "Are you a new user? Click to register"
-            : "Welcome! Click to continue login"}
-        </p>
-      </div>
-    </div>
-  
-  );
+        </div>
+    );
 };
 
-export default Login;
+export default LoginPage;
