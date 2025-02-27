@@ -1,15 +1,11 @@
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
-import Login from './components/Auth/Auth';
-import UploadForm from './components/form/Form';
-import ViewUsers from './components/admin/viewForm';
+import RegistrationForm from './components/Student/Registeration';
 function App() {
   return (
     <>
     <BrowserRouter>
     <Routes>
-      <Route path='/login' element= {<Login/>} />      
-      <Route path='/' element= {<UploadForm/>} />      
-      <Route path='/admin/view' element= {<ViewUsers/>} />      
+      <Route path='/register' element= {<RegistrationForm/>} />          
     </Routes>
     </BrowserRouter>
     </>
